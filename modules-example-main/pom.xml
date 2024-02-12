@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.example</groupId>
+        <artifactId>modules-example</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>modules-example-main</artifactId>
+
+    <properties>
+        <javafx.version>21.0.2</javafx.version>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jlink-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <verbose>true</verbose>
+                    <includeLocales>
+                        <includeLocale>de</includeLocale>
+                    </includeLocales>
+                    <launcher>javafx-app=modules.example.main/com.example.main.JavaFxApp</launcher>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.graalvm.buildtools</groupId>
+                <artifactId>native-maven-plugin</artifactId>
+                <version>0.10.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <fallback>false</fallback>
+                    <mainClass>com.example.main.JavaFxApp</mainClass>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.gluonhq</groupId>
+                <artifactId>gluonfx-maven-plugin</artifactId>
+                <version>1.0.22</version>
+                <configuration>
+                    <mainClass>com.example.main.JavaFxApp</mainClass>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>de.fluxparticle</groupId>
+                <artifactId>jpackage-maven-plugin</artifactId>
+                <version>0.0.2</version>
+                <configuration>
+                    <name>JavaFxApp</name>
+                    <mainClass>modules.example.main/com.example.main.JavaFxApp</mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <classifier>${javafx.classifier}</classifier>
+            <version>${javafx.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.openjfx</groupId>
+                    <artifactId>javafx-graphics</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <classifier>${javafx.classifier}</classifier>
+            <version>${javafx.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.openjfx</groupId>
+                    <artifactId>javafx-base</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-base</artifactId>
+            <classifier>${javafx.classifier}</classifier>
+            <version>${javafx.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.example</groupId>
+            <artifactId>modules-example-direct</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.example</groupId>
+            <artifactId>modules-example-reflection</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <id>macosx-x86_64</id>
+            <activation>
+                <os>
+                    <name>mac os x</name>
+                    <arch>x86_64</arch>
+                </os>
+                <property>
+                    <name>javafx.monocle</name>
+                    <value>!true</value>
+                </property>
+            </activation>
+            <properties>
+                <javafx.classifier>mac</javafx.classifier>
+            </properties>
+        </profile>
+        <profile>
+            <id>macosx-aarch64</id>
+            <activation>
+                <os>
+                    <name>mac os x</name>
+                    <arch>aarch64</arch>
+                </os>
+                <property>
+                    <name>javafx.monocle</name>
+                    <value>!true</value>
+                </property>
+            </activation>
+            <properties>
+                <javafx.classifier>mac-aarch64</javafx.classifier>
+            </properties>
+        </profile>
+        <profile>
+            <id>windows-x86_64</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                    <arch>amd64</arch>
+                </os>
+                <property>
+                    <name>javafx.monocle</name>
+                    <value>!true</value>
+                </property>
+            </activation>
+            <properties>
+                <javafx.classifier>win</javafx.classifier>
+            </properties>
+        </profile>
+        <profile>
+            <id>windows-x86</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                    <arch>x86</arch>
+                </os>
+                <property>
+                    <name>javafx.monocle</name>
+                    <value>!true</value>
+                </property>
+            </activation>
+            <properties>
+                <javafx.classifier>win-x86</javafx.classifier>
+            </properties>
+        </profile>
+    </profiles>
+
+</project>
